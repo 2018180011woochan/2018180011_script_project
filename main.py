@@ -34,13 +34,19 @@ class MainGUI:
         myFont = font.Font(g_daywindow, size=15, weight='bold')
         WeatherInfoText = Label(g_daywindow, font = myFont, text="날씨 정보")
         WeatherInfoText.pack()
-        WeatherInfoText.place(x=350,y=80)
+        WeatherInfoText.place(x=325,y=80)
+
+    def WeatherInfoPicture(self):
+        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
+        self.canvas.pack()
+        self.canvas.place(x=300, y=130)
 
     def __init__(self):
         self.InitSearchEntry()
         self.InitSearchButton()
         self.RenderCity()
         self.WeatherInfoText()
+        self.WeatherInfoPicture()
 
         g_daywindow.mainloop()
 MainGUI()
