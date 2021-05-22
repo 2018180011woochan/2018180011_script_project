@@ -144,9 +144,10 @@ InitSearchListBox()
 InitInputLabel()
 
 InitSearchButton()
-g_Tk.mainloop()
+
 InitRenderText()
 
+g_Tk.mainloop()
 #InitSendEmailButton()
 #InitSortListBox()
 #InitSortButton()

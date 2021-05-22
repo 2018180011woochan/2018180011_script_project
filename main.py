@@ -22,9 +22,18 @@ class MainGUI:
     def SearchButtonAction(self):
         pass
 
+    def RenderCity(self):
+        global RenderCity
+
+        CityFont = font.Font(g_daywindow, size=10)
+        RenderCity = Text(g_daywindow, width=31, height=5)
+        RenderCity.pack()
+        RenderCity.place(x=31,y=120)
+
     def __init__(self):
         self.InitSearchEntry()
         self.InitSearchButton()
+        self.RenderCity()
 
         g_daywindow.mainloop()
 MainGUI()
