@@ -30,10 +30,17 @@ class MainGUI:
         RenderCity.pack()
         RenderCity.place(x=31,y=120)
 
+    def WeatherInfoText(self):
+        myFont = font.Font(g_daywindow, size=15, weight='bold')
+        WeatherInfoText = Label(g_daywindow, font = myFont, text="날씨 정보")
+        WeatherInfoText.pack()
+        WeatherInfoText.place(x=350,y=80)
+
     def __init__(self):
         self.InitSearchEntry()
         self.InitSearchButton()
         self.RenderCity()
+        self.WeatherInfoText()
 
         g_daywindow.mainloop()
 MainGUI()
