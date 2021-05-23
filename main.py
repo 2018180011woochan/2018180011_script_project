@@ -50,6 +50,11 @@ class MainGUI:
         UpTempatureInfo.place(x=31,y=210)
         DownTempatureInfo.place(x=31,y=260)
 
+    def TempatureGraph(self):
+        self.canvas = Canvas(g_daywindow, bg='white', width='250', height='200')
+        self.canvas.pack()
+        self.canvas.place(x=31, y=300)
+
     def __init__(self):
         self.InitSearchEntry()
         self.InitSearchButton()
@@ -57,6 +62,7 @@ class MainGUI:
         self.WeatherInfoText()
         self.WeatherInfoPicture()
         self.TempatureInfo()
+        self.TempatureGraph()
 
         g_daywindow.mainloop()
 MainGUI()
