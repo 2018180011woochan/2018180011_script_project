@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import font
+import urllib
+import http.client
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -39,21 +41,31 @@ class MainGUI:
     def WeatherInfoPicture(self):
         self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
         self.canvas.pack()
-        self.canvas.place(x=300, y=130)
+        self.canvas.place(x=300, y=110)
 
-    def TempatureInfo(self):
+    def TemperatureInfo(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
-        UpTempatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
-        DownTempatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
-        UpTempatureInfo.pack()
-        DownTempatureInfo.pack()
-        UpTempatureInfo.place(x=31,y=210)
-        DownTempatureInfo.place(x=31,y=260)
+        UpTemperatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
+        DownTemperatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
+        UpTemperatureInfo.pack()
+        DownTemperatureInfo.pack()
+        UpTemperatureInfo.place(x=31,y=210)
+        DownTemperatureInfo.place(x=31,y=260)
 
-    def TempatureGraph(self):
+    def TemperatureGraph(self):
         self.canvas = Canvas(g_daywindow, bg='white', width='250', height='200')
         self.canvas.pack()
         self.canvas.place(x=31, y=300)
+
+    def DustInfo(self):
+        myFont = font.Font(g_daywindow, size=15, weight='bold')
+        DustText = Label(g_daywindow, font=myFont, text="미세먼지 정보")
+        DustText.pack()
+        DustText.place(x=310,y=320)
+
+        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
+        self.canvas.pack()
+        self.canvas.place(x=300, y=350)
 
     def __init__(self):
         self.InitSearchEntry()
@@ -61,8 +73,9 @@ class MainGUI:
         self.RenderCity()
         self.WeatherInfoText()
         self.WeatherInfoPicture()
-        self.TempatureInfo()
-        self.TempatureGraph()
+        self.TemperatureInfo()
+        self.TemperatureGraph()
+        self.DustInfo()
 
         g_daywindow.mainloop()
 MainGUI()
