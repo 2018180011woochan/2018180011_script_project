@@ -41,12 +41,22 @@ class MainGUI:
         self.canvas.pack()
         self.canvas.place(x=300, y=130)
 
+    def TempatureInfo(self):
+        myFont = font.Font(g_daywindow, size=15, weight='bold')
+        UpTempatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
+        DownTempatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
+        UpTempatureInfo.pack()
+        DownTempatureInfo.pack()
+        UpTempatureInfo.place(x=31,y=210)
+        DownTempatureInfo.place(x=31,y=260)
+
     def __init__(self):
         self.InitSearchEntry()
         self.InitSearchButton()
         self.RenderCity()
         self.WeatherInfoText()
         self.WeatherInfoPicture()
+        self.TempatureInfo()
 
         g_daywindow.mainloop()
 MainGUI()
