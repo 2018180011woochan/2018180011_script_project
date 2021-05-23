@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import font
 import urllib
 import http.client
+from xml.dom.minidom import parse, parseString
+from xml.etree import ElementTree
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -9,6 +11,7 @@ g_daywindow.geometry("500x600")
 
 class MainGUI:
     def InitSearchEntry(self):
+        global InputLabel
         myFont =font.Font(g_daywindow, size=15, weight='bold')
         InputLabel =Entry(g_daywindow, font=myFont, width=15)
         InputLabel.pack()
@@ -19,10 +22,22 @@ class MainGUI:
         SearchButton = Button(g_daywindow, font=myFont, text="검색",
                               command=self.SearchButtonAction)
         SearchButton.pack()
-        SearchButton.place(x=210,y=80)
+        SearchButton.place(x=210, y=80)
 
     def SearchButtonAction(self):
-        pass
+        conn = http.client.HTTPConnection("apis.data.go.kr")
+        conn.request("GET","/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&base_date=20210523&base_time=0500&nx=56&ny=122")
+        req = conn.getresponse()
+        print(req.status, req.reason)
+        strXml = req.read().decode('utf-8')
+        print(strXml)
+        tree = ElementTree.fromstring(strXml)
+        itemElement = tree.iter("item")
+        print(itemElement)
+
+        for item in itemElement:
+            strcategory = item.find("category")
+            print(strcategory.text)
 
     def RenderCity(self):
         global RenderCity
