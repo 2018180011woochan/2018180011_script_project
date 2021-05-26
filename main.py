@@ -117,6 +117,7 @@ class MainGUI:
         DownTemparature.place(x=151, y=260)
 
     def TemperatureGraph(self):
+        myFont = font.Font(g_daywindow, size=10, weight='bold')
         self.canvas = Canvas(g_daywindow, bg='white', width='250', height='200')
         self.canvas.pack()
         self.canvas.place(x=31, y=300)
@@ -134,8 +135,9 @@ class MainGUI:
             # Here we draw the bar
             self.canvas.create_rectangle(x0, y0, x1, y1, fill="red")
             self.canvas.create_text(x0+10, y0-10, text=str(y))
-            #self.canvas.create_text(x0+10, y0+100, text="test")
-
+        timeText = Label(g_daywindow, font=myFont, text="06시 09시 12시 15시 18시 21시 24시 3시")
+        timeText.pack()
+        timeText.place(x=40, y=500)
 
     def DustInfo(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
