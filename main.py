@@ -43,7 +43,14 @@ class MainGUI:
             a = 3
 
     def SearchSiheung(self):
-        pass
+        conn = http.client.HTTPConnection("apis.data.go.kr")
+        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time=2021052506&requestCode=A41")
+        req = conn.getresponse()
+
+        global DataList
+        DataList.clear()
+
+        
 
     def RenderCity(self):
         global RenderCity

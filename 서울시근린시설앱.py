@@ -140,14 +140,14 @@ def InitRenderText():
 InitTopText()
 
 InitSearchListBox()
-g_Tk.mainloop()
+
 InitInputLabel()
 
 InitSearchButton()
 
 InitRenderText()
 
-
+g_Tk.mainloop()
 #InitSendEmailButton()
 #InitSortListBox()
 #InitSortButton()
