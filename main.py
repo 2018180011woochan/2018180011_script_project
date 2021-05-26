@@ -38,6 +38,8 @@ class MainGUI:
         myListBox = SearchListBox.curselection()[0]
         if myListBox == 0:
             self.SearchSiheung()
+            self.TemperatureGraph()
+            self.TemperatureResult()
         elif myListBox == 1:
             a = 2
         elif myListBox == 2:
@@ -65,15 +67,14 @@ class MainGUI:
                 for temp in item:
                     subitem = temp.childNodes
                     #print(subitem[0].firstChild.nodeValue)
-                    DataList.append(subitem[3].firstChild.nodeValue)
-                    DataList.append(subitem[4].firstChild.nodeValue)
-                    DataList.append(subitem[5].firstChild.nodeValue)
-                    DataList.append(subitem[6].firstChild.nodeValue)
-                    DataList.append(subitem[7].firstChild.nodeValue)
-                    DataList.append(subitem[8].firstChild.nodeValue)
-                    DataList.append(subitem[9].firstChild.nodeValue)
-                    DataList.append(subitem[10].firstChild.nodeValue)
-                    
+                    DataList.append(int(subitem[3].firstChild.nodeValue))
+                    DataList.append(int(subitem[4].firstChild.nodeValue))
+                    DataList.append(int(subitem[5].firstChild.nodeValue))
+                    DataList.append(int(subitem[6].firstChild.nodeValue))
+                    DataList.append(int(subitem[7].firstChild.nodeValue))
+                    DataList.append(int(subitem[8].firstChild.nodeValue))
+                    DataList.append(int(subitem[9].firstChild.nodeValue))
+                    DataList.append(int(subitem[10].firstChild.nodeValue))
 
     def RenderCity(self):
         global RenderCity
@@ -98,15 +99,43 @@ class MainGUI:
         myFont = font.Font(g_daywindow, size=15, weight='bold')
         UpTemperatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
         DownTemperatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
+
         UpTemperatureInfo.pack()
         DownTemperatureInfo.pack()
+
         UpTemperatureInfo.place(x=31,y=210)
         DownTemperatureInfo.place(x=31,y=260)
+
+    def TemperatureResult(self):
+        myFont = font.Font(g_daywindow, size=15, weight='bold')
+        DataList.sort()
+        UpTemparature = Label(g_daywindow, font=myFont, text=str(DataList[7]))
+        DownTemparature = Label(g_daywindow, font=myFont, text=str(DataList[0]))
+        UpTemparature.pack()
+        DownTemparature.pack()
+        UpTemparature.place(x=151, y=210)
+        DownTemparature.place(x=151, y=260)
 
     def TemperatureGraph(self):
         self.canvas = Canvas(g_daywindow, bg='white', width='250', height='200')
         self.canvas.pack()
         self.canvas.place(x=31, y=300)
+
+        y_stretch = 15
+        y_gap = 20
+        x_stretch = 10
+        x_width = 20
+        x_gap = 20
+        for x, y in enumerate(DataList):
+            x0 = x * x_stretch + x * x_width + x_gap
+            y0 = 350 - (y * y_stretch + y_gap)
+            x1 = x * x_stretch + x * x_width + x_width + x_gap
+            y1 = 350 - y_gap
+            # Here we draw the bar
+            self.canvas.create_rectangle(x0, y0, x1, y1, fill="red")
+            self.canvas.create_text(x0+10, y0-10, text=str(y))
+            #self.canvas.create_text(x0+10, y0+100, text="test")
+
 
     def DustInfo(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
