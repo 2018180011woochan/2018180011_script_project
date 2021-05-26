@@ -9,6 +9,7 @@ g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
 g_daywindow.geometry("500x600")
 DataList = []
+DustState = []
 
 class MainGUI:
     def InitSearchEntry(self):
@@ -40,6 +41,7 @@ class MainGUI:
             self.SearchSiheung()
             self.TemperatureGraph()
             self.TemperatureResult()
+            self.SearchGyeonggiDust()
         elif myListBox == 1:
             a = 2
         elif myListBox == 2:
@@ -139,6 +141,34 @@ class MainGUI:
         self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
         self.canvas.pack()
         self.canvas.place(x=300, y=350)
+
+    def SearchGyeonggiDust(self):
+        connn = http.client.HTTPConnection("apis.data.go.kr")
+        connn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName=경기&ver=1.0")
+        req = connn.getresponse()
+
+        global DustState
+        DustState.clear()
+
+        if req.status == 200:
+            TempDoc =req.read().decode('utf-8')
+            if TempDoc == None:
+                print("에러")
+            else:
+                parseData = parseString(TempDoc)
+                response = parseData.childNodes
+                body = response[0].childNodes
+                items = body[1].childNodes
+                item = items[1].childNodes
+
+                for temp in item:
+                    subitem = temp.childNodes
+                    if subitem.nodename == "정왕동":
+                        print(int(subitem[8].firstChild.nodeValue))
+                        print(int(subitem[10].firstChild.nodeValue))
+
+    def DrawDustInfo(self):
+        pass
 
     def __init__(self):
         self.InitSearchEntry()
