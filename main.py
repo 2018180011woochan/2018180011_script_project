@@ -11,11 +11,20 @@ g_daywindow.geometry("500x600")
 
 class MainGUI:
     def InitSearchEntry(self):
-        global InputLabel
-        myFont =font.Font(g_daywindow, size=15, weight='bold')
-        InputLabel =Entry(g_daywindow, font=myFont, width=15)
-        InputLabel.pack()
-        InputLabel.place(x=30, y=80)
+        global SearchListBox
+        ListBoxScrollBar = Scrollbar(g_daywindow)
+        ListBoxScrollBar.pack()
+        ListBoxScrollBar.place(x=130,y=70)
+
+        myFont =font.Font(g_daywindow, size=10, weight='bold')
+        SearchListBox = Listbox(g_daywindow, font=myFont, activestyle='none',
+                                width=10, height=1, borderwidth=12, relief='ridge',
+                                yscrollcommand=ListBoxScrollBar.set)
+        SearchListBox.insert(1, "시흥시")
+        SearchListBox.insert(2, "안산시")
+        SearchListBox.insert(3, "서울시")
+        SearchListBox.pack()
+        SearchListBox.place(x=30, y=70)
 
     def InitSearchButton(self):
         myFont =font.Font(g_daywindow, size=10, weight='bold')
@@ -25,19 +34,16 @@ class MainGUI:
         SearchButton.place(x=210, y=80)
 
     def SearchButtonAction(self):
-        conn = http.client.HTTPConnection("apis.data.go.kr")
-        conn.request("GET","/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&base_date=20210523&base_time=0500&nx=56&ny=122")
-        req = conn.getresponse()
-        print(req.status, req.reason)
-        strXml = req.read().decode('utf-8')
-        print(strXml)
-        tree = ElementTree.fromstring(strXml)
-        itemElement = tree.iter("item")
-        print(itemElement)
+        myListBox = SearchListBox.curselection()[0]
+        if myListBox == 0:
+            self.SearchSiheung()
+        elif myListBox == 1:
+            a = 2
+        elif myListBox == 2:
+            a = 3
 
-        for item in itemElement:
-            strcategory = item.find("category")
-            print(strcategory.text)
+    def SearchSiheung(self):
+        pass
 
     def RenderCity(self):
         global RenderCity
@@ -85,12 +91,14 @@ class MainGUI:
     def __init__(self):
         self.InitSearchEntry()
         self.InitSearchButton()
+
         self.RenderCity()
         self.WeatherInfoText()
         self.WeatherInfoPicture()
         self.TemperatureInfo()
         self.TemperatureGraph()
         self.DustInfo()
-
         g_daywindow.mainloop()
+
+
 MainGUI()
