@@ -8,6 +8,7 @@ from xml.etree import ElementTree
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
 g_daywindow.geometry("500x600")
+DataList = []
 
 class MainGUI:
     def InitSearchEntry(self):
@@ -50,7 +51,29 @@ class MainGUI:
         global DataList
         DataList.clear()
 
-        
+        if req.status == 200:
+            TempDoc =req.read().decode('utf-8')
+            if TempDoc == None:
+                print("에러")
+            else:
+                parseData = parseString(TempDoc)
+                response = parseData.childNodes
+                body = response[0].childNodes
+                items = body[1].childNodes
+                item = items[1].childNodes
+
+                for temp in item:
+                    subitem = temp.childNodes
+                    #print(subitem[0].firstChild.nodeValue)
+                    DataList.append(subitem[3].firstChild.nodeValue)
+                    DataList.append(subitem[4].firstChild.nodeValue)
+                    DataList.append(subitem[5].firstChild.nodeValue)
+                    DataList.append(subitem[6].firstChild.nodeValue)
+                    DataList.append(subitem[7].firstChild.nodeValue)
+                    DataList.append(subitem[8].firstChild.nodeValue)
+                    DataList.append(subitem[9].firstChild.nodeValue)
+                    DataList.append(subitem[10].firstChild.nodeValue)
+                    
 
     def RenderCity(self):
         global RenderCity
