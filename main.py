@@ -66,7 +66,6 @@ class MainGUI:
 
                 for temp in item:
                     subitem = temp.childNodes
-                    #print(subitem[0].firstChild.nodeValue)
                     DataList.append(int(subitem[3].firstChild.nodeValue))
                     DataList.append(int(subitem[4].firstChild.nodeValue))
                     DataList.append(int(subitem[5].firstChild.nodeValue))
@@ -75,14 +74,6 @@ class MainGUI:
                     DataList.append(int(subitem[8].firstChild.nodeValue))
                     DataList.append(int(subitem[9].firstChild.nodeValue))
                     DataList.append(int(subitem[10].firstChild.nodeValue))
-
-    def RenderCity(self):
-        global RenderCity
-
-        CityFont = font.Font(g_daywindow, size=10)
-        RenderCity = Text(g_daywindow, width=31, height=5)
-        RenderCity.pack()
-        RenderCity.place(x=31,y=120)
 
     def WeatherInfoText(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
@@ -96,15 +87,15 @@ class MainGUI:
         self.canvas.place(x=300, y=110)
 
     def TemperatureInfo(self):
-        myFont = font.Font(g_daywindow, size=15, weight='bold')
+        myFont = font.Font(g_daywindow, size=20, weight='bold')
         UpTemperatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
         DownTemperatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
 
         UpTemperatureInfo.pack()
         DownTemperatureInfo.pack()
 
-        UpTemperatureInfo.place(x=31,y=210)
-        DownTemperatureInfo.place(x=31,y=260)
+        UpTemperatureInfo.place(x=31,y=160)
+        DownTemperatureInfo.place(x=31,y=220)
 
     def TemperatureResult(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
@@ -113,8 +104,8 @@ class MainGUI:
         DownTemparature = Label(g_daywindow, font=myFont, text=str(DataList[0]))
         UpTemparature.pack()
         DownTemparature.pack()
-        UpTemparature.place(x=151, y=210)
-        DownTemparature.place(x=151, y=260)
+        UpTemparature.place(x=200, y=170)
+        DownTemparature.place(x=200, y=230)
 
     def TemperatureGraph(self):
         myFont = font.Font(g_daywindow, size=10, weight='bold')
@@ -153,7 +144,6 @@ class MainGUI:
         self.InitSearchEntry()
         self.InitSearchButton()
 
-        self.RenderCity()
         self.WeatherInfoText()
         self.WeatherInfoPicture()
         self.TemperatureInfo()
