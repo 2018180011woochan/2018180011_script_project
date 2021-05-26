@@ -95,14 +95,17 @@ class MainGUI:
 
     def TemperatureInfo(self):
         myFont = font.Font(g_daywindow, size=20, weight='bold')
+        day = Label(g_daywindow, font=myFont, text="2021-05-27")
         UpTemperatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
         DownTemperatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
 
+        day.pack()
         UpTemperatureInfo.pack()
         DownTemperatureInfo.pack()
 
-        UpTemperatureInfo.place(x=31,y=160)
-        DownTemperatureInfo.place(x=31,y=220)
+        day.place(x=70, y=135)
+        UpTemperatureInfo.place(x=31,y=190)
+        DownTemperatureInfo.place(x=31,y=240)
 
     def TemperatureResult(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
@@ -111,8 +114,8 @@ class MainGUI:
         DownTemparature = Label(g_daywindow, font=myFont, text=str(DataList[0]))
         UpTemparature.pack()
         DownTemparature.pack()
-        UpTemparature.place(x=200, y=170)
-        DownTemparature.place(x=200, y=230)
+        UpTemparature.place(x=200, y=195)
+        DownTemparature.place(x=200, y=245)
 
     def TemperatureGraph(self):
         myFont = font.Font(g_daywindow, size=10, weight='bold')
