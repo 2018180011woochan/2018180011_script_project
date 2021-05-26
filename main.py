@@ -42,6 +42,7 @@ class MainGUI:
             self.TemperatureGraph()
             self.TemperatureResult()
             self.SearchGyeonggiDust()
+            self.DrawDustInfo()
         elif myListBox == 1:
             a = 2
         elif myListBox == 2:
@@ -49,7 +50,7 @@ class MainGUI:
 
     def SearchSiheung(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
-        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time=2021052506&requestCode=A41")
+        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time=2021052606&requestCode=A41")
         req = conn.getresponse()
 
         global DataList
@@ -68,14 +69,15 @@ class MainGUI:
 
                 for temp in item:
                     subitem = temp.childNodes
-                    DataList.append(int(subitem[3].firstChild.nodeValue))
-                    DataList.append(int(subitem[4].firstChild.nodeValue))
-                    DataList.append(int(subitem[5].firstChild.nodeValue))
-                    DataList.append(int(subitem[6].firstChild.nodeValue))
-                    DataList.append(int(subitem[7].firstChild.nodeValue))
-                    DataList.append(int(subitem[8].firstChild.nodeValue))
-                    DataList.append(int(subitem[9].firstChild.nodeValue))
-                    DataList.append(int(subitem[10].firstChild.nodeValue))
+                    if subitem.length != 0:
+                        DataList.append(int(subitem[3].firstChild.nodeValue))
+                        DataList.append(int(subitem[4].firstChild.nodeValue))
+                        DataList.append(int(subitem[5].firstChild.nodeValue))
+                        DataList.append(int(subitem[6].firstChild.nodeValue))
+                        DataList.append(int(subitem[7].firstChild.nodeValue))
+                        DataList.append(int(subitem[8].firstChild.nodeValue))
+                        DataList.append(int(subitem[9].firstChild.nodeValue))
+                        DataList.append(int(subitem[10].firstChild.nodeValue))
 
     def WeatherInfoText(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
@@ -122,9 +124,9 @@ class MainGUI:
         x_gap = 20
         for x, y in enumerate(DataList):
             x0 = x * x_stretch + x * x_width + x_gap
-            y0 = 350 - (y * y_stretch + y_gap)
+            y0 = 400 - (y * y_stretch + y_gap)
             x1 = x * x_stretch + x * x_width + x_width + x_gap
-            y1 = 350 - y_gap
+            y1 = 400 - y_gap
             # Here we draw the bar
             self.canvas.create_rectangle(x0, y0, x1, y1, fill="red")
             self.canvas.create_text(x0+10, y0-10, text=str(y))
@@ -145,6 +147,7 @@ class MainGUI:
     def SearchGyeonggiDust(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
         conn.request("GET", "/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&searchDate=2021-05-25&InformCode=PM10")
+        #conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName=경기&ver=1.0")
         req = conn.getresponse()
 
         global DustState
@@ -162,11 +165,13 @@ class MainGUI:
                 item = items[1].childNodes
 
                 for temp in item:
-                    subitem = temp.childNodes
-                    print(subitem.nodeName)
+                    if temp.nodeName == "item":
+                        realnode = temp.childNodes
+                        DustState.append(str(realnode[13].firstChild.nodeValue))
+
 
     def DrawDustInfo(self):
-        pass
+        print(DustState[0])
 
     def __init__(self):
         self.InitSearchEntry()
