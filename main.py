@@ -35,7 +35,7 @@ class MainGUI:
         SearchButton = Button(g_daywindow, font=myFont, text="검색",
                               command=self.SearchButtonAction)
         SearchButton.pack()
-        SearchButton.place(x=210, y=80)
+        SearchButton.place(x=170, y=80)
 
     def SearchButtonAction(self):
         myListBox = SearchListBox.curselection()[0]
@@ -53,7 +53,7 @@ class MainGUI:
 
     def SearchSiheung(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
-        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time=2021052606&requestCode=A41")
+        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time=2021052706&requestCode=A41")
         req = conn.getresponse()
 
         global DataList
@@ -141,11 +141,11 @@ class MainGUI:
         myFont = font.Font(g_daywindow, size=15, weight='bold')
         DustText = Label(g_daywindow, font=myFont, text="미세먼지 정보")
         DustText.pack()
-        DustText.place(x=310,y=320)
+        DustText.place(x=310,y=280)
 
-        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
-        self.canvas.pack()
-        self.canvas.place(x=300, y=350)
+        #self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
+        #self.canvas.pack()
+        #self.canvas.place(x=300, y=350)
 
     def SearchDust10(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
@@ -202,18 +202,45 @@ class MainGUI:
                             Dust25.append(int(realnode[21].firstChild.nodeValue))
 
     def DrawDustInfo(self):
-        #myFont = font.Font(g_daywindow, size=7, weight='bold')
+        myFont = font.Font(g_daywindow, size=10, weight='bold')
         #DustText = Label(g_daywindow, font=myFont, text=DustState[0])
         #DustText.pack()
         #DustText.place(x=280,y=500)
 
-        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
+        DustText = Label(g_daywindow, font=myFont, text="미세먼지:  "+str(Dust10[0]))
+        DustText.pack()
+        DustText.place(x=300,y=460)
+        DustText2 = Label(g_daywindow, font=myFont, text="초미세먼지: "+str(Dust25[0]))
+        DustText2.pack()
+        DustText2.place(x=300,y=480)
+
+        if Dust10[0] < 31:
+            photo = PhotoImage(file='good.png')
+        elif Dust10[0] >= 31 and Dust10[0] < 81:
+            photo = PhotoImage(file='nomal.png')
+        elif Dust10[0] >= 81 and Dust10[0] < 151:
+            photo = PhotoImage(file='bad.png')
+        else:
+            photo = PhotoImage(file='shit.png')
+        imagelabel = Label(g_daywindow, image=photo)
+        imagelabel.pack()
+        imagelabel.place(x=300, y=310)
+
+        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150', image=imagelabel)
         self.canvas.pack()
-        self.canvas.place(x=300, y=350)
-        self.canvas.create_text(50, 125, text="미세먼지:  "+str(Dust10[0]))
-        self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
+        #self.canvas.place(x=300, y=350)
+        #self.canvas.create_text(50, 125, text="미세먼지:  "+str(Dust10[0]))
+        #self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
+
+
 
     def __init__(self):
+        #wall = PhotoImage(file = 'back.png')
+        #wall_label = Label(image = wall)
+        #wall_label.place(x = 0,y = 0)
+        self.canvas = Canvas(g_daywindow, bg='azure', width='500', height='600')
+        self.canvas.pack()
+        self.canvas.place(x=0,y=0)
         self.InitSearchEntry()
         self.InitSearchButton()
 
