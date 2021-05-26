@@ -143,13 +143,13 @@ class MainGUI:
         self.canvas.place(x=300, y=350)
 
     def SearchGyeonggiDust(self):
-        connn = http.client.HTTPConnection("apis.data.go.kr")
-        connn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName=경기&ver=1.0")
-        req = connn.getresponse()
+        conn = http.client.HTTPConnection("apis.data.go.kr")
+        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&searchDate=2021-05-25&InformCode=PM10")
+        req = conn.getresponse()
 
         global DustState
         DustState.clear()
-
+        print(req.status)
         if req.status == 200:
             TempDoc =req.read().decode('utf-8')
             if TempDoc == None:
@@ -158,14 +158,12 @@ class MainGUI:
                 parseData = parseString(TempDoc)
                 response = parseData.childNodes
                 body = response[0].childNodes
-                items = body[1].childNodes
+                items = body[3].childNodes
                 item = items[1].childNodes
 
                 for temp in item:
                     subitem = temp.childNodes
-                    if subitem.nodename == "정왕동":
-                        print(int(subitem[8].firstChild.nodeValue))
-                        print(int(subitem[10].firstChild.nodeValue))
+                    print(subitem.nodeName)
 
     def DrawDustInfo(self):
         pass
