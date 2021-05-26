@@ -10,6 +10,8 @@ g_daywindow.title("Weather_Reminder")
 g_daywindow.geometry("500x600")
 DataList = []
 DustState = []
+Dust10 = []
+Dust25 = []
 
 class MainGUI:
     def InitSearchEntry(self):
@@ -41,7 +43,8 @@ class MainGUI:
             self.SearchSiheung()
             self.TemperatureGraph()
             self.TemperatureResult()
-            self.SearchGyeonggiDust()
+            self.SearchDust10()
+            self.SearchDustInfo()
             self.DrawDustInfo()
         elif myListBox == 1:
             a = 2
@@ -144,9 +147,9 @@ class MainGUI:
         self.canvas.pack()
         self.canvas.place(x=300, y=350)
 
-    def SearchGyeonggiDust(self):
+    def SearchDust10(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
-        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&searchDate=2021-05-25&InformCode=PM10")
+        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&searchDate=2021-05-26&InformCode=PM10")
         #conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName=경기&ver=1.0")
         req = conn.getresponse()
 
@@ -169,9 +172,46 @@ class MainGUI:
                         realnode = temp.childNodes
                         DustState.append(str(realnode[13].firstChild.nodeValue))
 
+    def SearchDustInfo(self):
+        conn = http.client.HTTPConnection("apis.data.go.kr")
+        hangul_utf8 = urllib.parse.quote("경기")
+        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName="+hangul_utf8+"&ver=1.0")
+        req = conn.getresponse()
+
+        global DustState
+        DustState.clear()
+        print(req.status)
+        if req.status == 200:
+            TempDoc =req.read().decode('utf-8')
+            if TempDoc == None:
+                print("에러")
+            else:
+                parseData = parseString(TempDoc)
+                response = parseData.childNodes
+                body = response[0].childNodes
+                items = body[3].childNodes
+                item = items[1].childNodes
+
+                for temp in item:
+                    if temp.nodeName == "item":
+                        realnode = temp.childNodes
+                        if realnode[41].firstChild.nodeValue == "정왕동":
+                            print(int(realnode[17].firstChild.nodeValue))
+                            print(int(realnode[21].firstChild.nodeValue))
+                            Dust10.append(int(realnode[17].firstChild.nodeValue))
+                            Dust25.append(int(realnode[21].firstChild.nodeValue))
 
     def DrawDustInfo(self):
-        print(DustState[0])
+        #myFont = font.Font(g_daywindow, size=7, weight='bold')
+        #DustText = Label(g_daywindow, font=myFont, text=DustState[0])
+        #DustText.pack()
+        #DustText.place(x=280,y=500)
+
+        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
+        self.canvas.pack()
+        self.canvas.place(x=300, y=350)
+        self.canvas.create_text(50, 125, text="미세먼지:  "+str(Dust10[0]))
+        self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
 
     def __init__(self):
         self.InitSearchEntry()
