@@ -14,7 +14,7 @@ DustState = []
 Dust10 = []
 Dust25 = []
 now = datetime.datetime.now()
-nowDate = now.strftime('%Y%m%d')
+
 
 class MainGUI:
     def InitSearchEntry(self):
@@ -56,7 +56,7 @@ class MainGUI:
 
     def SearchSiheung(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
-        print(nowDate)
+        nowDate = now.strftime('%Y%m%d')
         conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time="+nowDate+"06&requestCode=A41")
         req = conn.getresponse()
 
@@ -217,19 +217,19 @@ class MainGUI:
 
         DustText = Label(g_daywindow, font=myFont, text="미세먼지:  "+str(Dust10[0]))
         DustText.pack()
-        DustText.place(x=300,y=460)
+        DustText.place(x=300,y=480)
         DustText2 = Label(g_daywindow, font=myFont, text="초미세먼지: "+str(Dust25[0]))
         DustText2.pack()
-        DustText2.place(x=300,y=480)
+        DustText2.place(x=300,y=500)
 
         if Dust10[0] < 31:
-            photo = PhotoImage(file='good.png')
+            photo = PhotoImage(file="image/good.png")
         elif Dust10[0] >= 31 and Dust10[0] < 81:
-            photo = PhotoImage(file='nomal.png')
+            photo = PhotoImage(file="image/nomal.png")
         elif Dust10[0] >= 81 and Dust10[0] < 151:
-            photo = PhotoImage(file='bad.png')
+            photo = PhotoImage(file="image/bad.png")
         else:
-            photo = PhotoImage(file='shit.png')
+            photo = PhotoImage(file="image/shit.png")
         imagelabel = Label(g_daywindow, image=photo)
         imagelabel.pack()
         imagelabel.place(x=300, y=310)
@@ -240,7 +240,12 @@ class MainGUI:
         #self.canvas.create_text(50, 125, text="미세먼지:  "+str(Dust10[0]))
         #self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
 
-
+    def Telegram(self):
+        pass
+    def GoogleMap(self):
+        pass
+    def GMail(self):
+        pass
 
     def __init__(self):
         #wall = PhotoImage(file = 'back.png')
@@ -257,6 +262,10 @@ class MainGUI:
         self.TemperatureInfo()
         self.TemperatureGraph()
         self.DustInfo()
+
+        self.Telegram()
+        self.GoogleMap()
+        self.GMail()
         g_daywindow.mainloop()
 
 
