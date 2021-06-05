@@ -4,6 +4,7 @@ import urllib
 import http.client
 from xml.dom.minidom import parse, parseString
 from xml.etree import ElementTree
+import datetime
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -12,6 +13,8 @@ DataList = []
 DustState = []
 Dust10 = []
 Dust25 = []
+now = datetime.datetime.now()
+nowDate = now.strftime('%Y%m%d')
 
 class MainGUI:
     def InitSearchEntry(self):
@@ -53,7 +56,8 @@ class MainGUI:
 
     def SearchSiheung(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
-        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time=2021052706&requestCode=A41")
+        print(nowDate)
+        conn.request("GET", "/1360000/LivingWthrIdxService01/getSenTaIdx?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&pageNo=1&numOfRows=10&dataType=XML&areaNo=4139058900&time="+nowDate+"06&requestCode=A41")
         req = conn.getresponse()
 
         global DataList
@@ -95,7 +99,8 @@ class MainGUI:
 
     def TemperatureInfo(self):
         myFont = font.Font(g_daywindow, size=20, weight='bold')
-        day = Label(g_daywindow, font=myFont, text="2021-05-27")
+        DataInfo = now.strftime('%Y-%m-%d')
+        day = Label(g_daywindow, font=myFont, text=DataInfo)
         UpTemperatureInfo = Label(g_daywindow, font = myFont, text="최고 기온")
         DownTemperatureInfo = Label(g_daywindow, font=myFont, text="최저 기온")
 
@@ -152,8 +157,8 @@ class MainGUI:
 
     def SearchDust10(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
-        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&searchDate=2021-05-26&InformCode=PM10")
-        #conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName=경기&ver=1.0")
+        DataInfo = now.strftime('%Y-%m-%d')
+        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&searchDate="+DataInfo+"&InformCode=PM10")
         req = conn.getresponse()
 
         global DustState
