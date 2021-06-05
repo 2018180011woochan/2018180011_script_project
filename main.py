@@ -1,10 +1,16 @@
 from tkinter import *
 from tkinter import font
+from tkinter import messagebox
 import urllib
 import http.client
 from xml.dom.minidom import parse, parseString
 from xml.etree import ElementTree
 import datetime
+#import folium
+# pip install cefpython3==66.0
+import sys
+#from cefpython3 import cefpython as cef
+import threading
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -245,14 +251,16 @@ class MainGUI:
         #GooglemapLabel = Label(g_daywindow, image=p)
         #GooglemapLabel.pack()
         #GooglemapLabel.place(x=30,y=530))
-        GooglemapButton = Button(g_daywindow, command=self.OpenMap)
+        GooglemapButton = Button(g_daywindow, width='6', height='3', command=self.OpenMap)
         GooglemapButton.place(x=30,y=530)
 
     def OpenMap(self):
         print("오픈맵")
 
     def GMail(self):
-        pass
+        GMailButton = Button(g_daywindow, width='6', height='3', command=self.OpenMap)
+        GMailButton.place(x=100,y=530)
+
     def Telegram(self):
         pass
 
