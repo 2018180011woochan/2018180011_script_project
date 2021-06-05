@@ -242,9 +242,14 @@ class MainGUI:
 
     def GoogleMap(self):
         p = PhotoImage(file="image/Clubs1.png")
-        self.GooglemapLabel = Label(g_daywindow, image=p, width='40', height='40')
-        self.GooglemapLabel.pack()
-        self.GooglemapLabel.place(x=30,y=530)
+        #GooglemapLabel = Label(g_daywindow, image=p)
+        #GooglemapLabel.pack()
+        #GooglemapLabel.place(x=30,y=530))
+        GooglemapButton = Button(g_daywindow, command=self.OpenMap)
+        GooglemapButton.place(x=30,y=530)
+
+    def OpenMap(self):
+        print("오픈맵")
 
     def GMail(self):
         pass
