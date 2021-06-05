@@ -11,6 +11,8 @@ import datetime
 import sys
 #from cefpython3 import cefpython as cef
 import threading
+#import gmail
+#import internetbook
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -258,8 +260,12 @@ class MainGUI:
         print("오픈맵")
 
     def GMail(self):
-        GMailButton = Button(g_daywindow, width='6', height='3', command=self.OpenMap)
+        GMailButton = Button(g_daywindow, width='6', height='3', command=self.SendMail)
         GMailButton.place(x=100,y=530)
+
+    def SendMail(self):
+        #sendMain()
+        pass
 
     def Telegram(self):
         pass
