@@ -240,12 +240,17 @@ class MainGUI:
         #self.canvas.create_text(50, 125, text="미세먼지:  "+str(Dust10[0]))
         #self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
 
-    def Telegram(self):
-        pass
     def GoogleMap(self):
-        pass
+        p = PhotoImage(file="image/Clubs1.png")
+        self.GooglemapLabel = Label(g_daywindow, image=p, width='40', height='40')
+        self.GooglemapLabel.pack()
+        self.GooglemapLabel.place(x=30,y=530)
+
     def GMail(self):
         pass
+    def Telegram(self):
+        pass
+
 
     def __init__(self):
         #wall = PhotoImage(file = 'back.png')
@@ -263,9 +268,10 @@ class MainGUI:
         self.TemperatureGraph()
         self.DustInfo()
 
-        self.Telegram()
         self.GoogleMap()
         self.GMail()
+        self.Telegram()
+
         g_daywindow.mainloop()
 
 
