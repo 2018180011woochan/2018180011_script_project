@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import font
 from tkinter import messagebox
+import tkinter
 import urllib
 import http.client
 from xml.dom.minidom import parse, parseString
@@ -13,6 +14,11 @@ import sys
 import threading
 #import gmail
 #import internetbook
+import mimetypes
+import mysmtplib
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -21,7 +27,9 @@ DataList = []
 DustState = []
 Dust10 = []
 Dust25 = []
+myimagelabel = []
 now = datetime.datetime.now()
+
 
 
 class MainGUI:
@@ -123,12 +131,12 @@ class MainGUI:
     def TemperatureResult(self):
         myFont = font.Font(g_daywindow, size=15, weight='bold')
         DataList.sort()
-        UpTemparature = Label(g_daywindow, font=myFont, text=str(DataList[7]))
-        DownTemparature = Label(g_daywindow, font=myFont, text=str(DataList[0]))
-        UpTemparature.pack()
-        DownTemparature.pack()
-        UpTemparature.place(x=200, y=195)
-        DownTemparature.place(x=200, y=245)
+        self.UpTemparature = Label(g_daywindow, font=myFont, text=str(DataList[7]))
+        self.DownTemparature = Label(g_daywindow, font=myFont, text=str(DataList[0]))
+        self.UpTemparature.pack()
+        self.DownTemparature.pack()
+        self.UpTemparature.place(x=200, y=195)
+        self.DownTemparature.place(x=200, y=245)
 
     def TemperatureGraph(self):
         myFont = font.Font(g_daywindow, size=10, weight='bold')
@@ -211,7 +219,7 @@ class MainGUI:
                 for temp in item:
                     if temp.nodeName == "item":
                         realnode = temp.childNodes
-                        if realnode[41].firstChild.nodeValue == "정왕동":
+                        if realnode[41].firstChild.nodeValue == "고잔동":
                             print(int(realnode[17].firstChild.nodeValue))
                             print(int(realnode[21].firstChild.nodeValue))
                             Dust10.append(int(realnode[17].firstChild.nodeValue))
@@ -225,10 +233,10 @@ class MainGUI:
 
         DustText = Label(g_daywindow, font=myFont, text="미세먼지:  "+str(Dust10[0]))
         DustText.pack()
-        DustText.place(x=300,y=480)
+        DustText.place(x=300,y=500)
         DustText2 = Label(g_daywindow, font=myFont, text="초미세먼지: "+str(Dust25[0]))
         DustText2.pack()
-        DustText2.place(x=300,y=500)
+        DustText2.place(x=300,y=520)
 
         if Dust10[0] < 31:
             photo = PhotoImage(file="image/good.png")
@@ -249,12 +257,10 @@ class MainGUI:
         #self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
 
     def GoogleMap(self):
-        p = PhotoImage(file="image/Clubs1.png")
-        #GooglemapLabel = Label(g_daywindow, image=p)
-        #GooglemapLabel.pack()
-        #GooglemapLabel.place(x=30,y=530))
-        GooglemapButton = Button(g_daywindow, width='6', height='3', command=self.OpenMap)
-        GooglemapButton.place(x=30,y=530)
+        #p = PhotoImage(file="image/Clubs1.png")
+        myimage=PhotoImage(file="image/Clubs1.png")
+        self.GooglemapButton = Button(g_daywindow, width=6, height=3, command=self.OpenMap)
+        self.GooglemapButton.place(x=30,y=530)
 
     def OpenMap(self):
         print("오픈맵")
@@ -264,8 +270,30 @@ class MainGUI:
         GMailButton.place(x=100,y=530)
 
     def SendMail(self):
-        #sendMain()
-        pass
+        #global value
+        host = "smtp.gmail.com" # Gmail STMP 서버 주소.
+        port = "587"
+        htmlFileName = "logo.html"
+
+        senderAddr = "kimwoochan1996@gmail.com"     # 보내는 사람 email 주소.
+        recipientAddr = "wc5427@naver.com"   # 받는 사람 email 주소.
+
+        DataInfo = now.strftime('%Y-%m-%d')
+
+        text = DataInfo+" 오늘의 최고기온은 "+str(DataList[7])+" 이고 최저기온은 "+str(DataList[0])+"입니다\n또한 미세먼지 수치는 "+str(Dust10[0])+"이며 초미세먼지는 "+str(Dust25[0])+"입니다"
+        #msg = MIMEBase("multipart", "alternative")
+        msg = MIMEText(text)
+        msg['Subject'] = DataInfo+" 오늘의 날씨 정보"
+        msg['From'] = senderAddr
+        msg['To'] = recipientAddr
+
+        s = mysmtplib.MySMTP(host,port)
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
+        s.login("kimwoochan1996@gmail.com","dkdldb127!!")
+        s.sendmail(senderAddr , [recipientAddr], msg.as_string())
+        s.close()
 
     def Telegram(self):
         pass
@@ -275,6 +303,8 @@ class MainGUI:
         #wall = PhotoImage(file = 'back.png')
         #wall_label = Label(image = wall)
         #wall_label.place(x = 0,y = 0)
+        self.UpTemparature = 0
+        self.DownTemparature = 0
         self.canvas = Canvas(g_daywindow, bg='azure', width='500', height='600')
         self.canvas.pack()
         self.canvas.place(x=0,y=0)
