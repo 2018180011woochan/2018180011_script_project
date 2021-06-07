@@ -21,7 +21,7 @@ from email.mime.text import MIMEText
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
-g_daywindow.geometry("500x600")
+g_daywindow.geometry("600x600")
 DataList = []
 DustState = []
 Dust10 = []
@@ -99,17 +99,6 @@ class MainGUI:
                         DataList.append(int(subitem[9].firstChild.nodeValue))
                         DataList.append(int(subitem[10].firstChild.nodeValue))
 
-    def WeatherInfoText(self):
-        myFont = font.Font(g_daywindow, size=15, weight='bold')
-        WeatherInfoText = Label(g_daywindow, font = myFont, text="날씨 정보")
-        WeatherInfoText.pack()
-        WeatherInfoText.place(x=325,y=80)
-
-    def WeatherInfoPicture(self):
-        self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
-        self.canvas.pack()
-        self.canvas.place(x=300, y=110)
-
     def TemperatureInfo(self):
         myFont = font.Font(g_daywindow, size=20, weight='bold')
         DataInfo = now.strftime('%Y-%m-%d')
@@ -159,6 +148,44 @@ class MainGUI:
         timeText.place(x=40, y=500)
 
     def DustInfo(self):
+        global SearchSiteListBox
+        ListBoxScrollBar = Scrollbar(g_daywindow)
+        ListBoxScrollBar.pack()
+        ListBoxScrollBar.place(x=130,y=70)
+
+        myFont =font.Font(g_daywindow, size=10, weight='bold')
+        SearchSiteListBox = Listbox(g_daywindow, font=myFont, activestyle='none',
+                                width=15, height=3, borderwidth=2,
+                                yscrollcommand=ListBoxScrollBar.set)
+
+        conn = http.client.HTTPConnection("apis.data.go.kr")
+        hangul_utf8 = urllib.parse.quote("경기")
+        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName="+hangul_utf8+"&ver=1.0")
+        req = conn.getresponse()
+
+        print(req.status)
+        if req.status == 200:
+            TempDoc =req.read().decode('utf-8')
+            if TempDoc == None:
+                print("에러")
+            else:
+                parseData = parseString(TempDoc)
+                response = parseData.childNodes
+                body = response[0].childNodes
+                items = body[3].childNodes
+                item = items[1].childNodes
+
+                i = 0
+
+                for temp in item:
+                    if temp.nodeName == "item":
+                        realnode = temp.childNodes
+                        SearchSiteListBox.insert(i, str(realnode[41].firstChild.nodeValue)+str(i))
+                        i += 1
+
+        SearchSiteListBox.pack()
+        SearchSiteListBox.place(x=310, y=70)
+
         myFont = font.Font(g_daywindow, size=15, weight='bold')
         DustText = Label(g_daywindow, font=myFont, text="미세먼지 정보")
         DustText.pack()
@@ -167,6 +194,16 @@ class MainGUI:
         #self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
         #self.canvas.pack()
         #self.canvas.place(x=300, y=350)
+
+    def InitSearchDustButton(self):
+        myFont =font.Font(g_daywindow, size=10, weight='bold')
+        SearchButton = Button(g_daywindow, font=myFont, text="검색",
+                              command=self.SearchDustButtonAction)
+        SearchButton.pack()
+        SearchButton.place(x=450, y=80)
+
+    def SearchDustButtonAction(self):
+        pass
 
     def SearchDust10(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
@@ -305,17 +342,16 @@ class MainGUI:
         #wall_label.place(x = 0,y = 0)
         self.UpTemparature = 0
         self.DownTemparature = 0
-        self.canvas = Canvas(g_daywindow, bg='azure', width='500', height='600')
+        self.canvas = Canvas(g_daywindow, bg='azure', width='600', height='600')
         self.canvas.pack()
         self.canvas.place(x=0,y=0)
         self.InitSearchEntry()
         self.InitSearchButton()
 
-        self.WeatherInfoText()
-        self.WeatherInfoPicture()
         self.TemperatureInfo()
         self.TemperatureGraph()
         self.DustInfo()
+        self.InitSearchDustButton()
 
         self.GoogleMap()
         self.GMail()
