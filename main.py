@@ -26,6 +26,7 @@ DataList = []
 DustState = []
 Dust10 = []
 Dust25 = []
+DustInfo = []
 myimagelabel = []
 now = datetime.datetime.now()
 
@@ -226,28 +227,34 @@ class MainGUI:
                 for temp in item:
                     if temp.nodeName == "item":
                         realnode = temp.childNodes
-                        if realnode[41].firstChild.nodeValue == myListBox:
-                            info1text = str(realnode[5].firstChild.nodeValue)
-                            info2text = str(realnode[7].firstChild.nodeValue)
-                            info3text = str(realnode[9].firstChild.nodeValue)
-                            info4text = str(realnode[39].firstChild.nodeValue)
-                            info5text = str(realnode[45].firstChild.nodeValue)
+                        if realnode[41].firstChild.nodeValue == "정왕동":
+                            DustInfo.append(str(realnode[5].firstChild.nodeValue))
+                            DustInfo.append(str(realnode[7].firstChild.nodeValue))
+                            DustInfo.append(str(realnode[9].firstChild.nodeValue))
+                            DustInfo.append(str(realnode[39].firstChild.nodeValue))
+                            DustInfo.append(str(realnode[45].firstChild.nodeValue))
+                            print(DustInfo[0])
+                            print(DustInfo[1])
+                            print(DustInfo[2])
+                            print(DustInfo[3])
+                            print(DustInfo[4])
+
 
         myFont =font.Font(g_daywindow, size=10, weight='bold')
 
-        self.info1 = Label(g_daywindow, font=myFont, text="통합대기환경수치"+info1text)
+        self.info1 = Label(g_daywindow, font=myFont, text="통합대기환경수치 : "+DustInfo[0])
         self.info1.pack()
         self.info1.place(x=320, y=150)
-        self.info2 = Label(g_daywindow, font=myFont, text="이황산가스 농도"+info2text)
+        self.info2 = Label(g_daywindow, font=myFont, text="이황산가스 농도 : "+DustInfo[1])
         self.info2.pack()
         self.info2.place(x=320, y=180)
-        self.info3 = Label(g_daywindow, font=myFont, text="일산화탄소 농도"+info3text)
+        self.info3 = Label(g_daywindow, font=myFont, text="일산화탄소 농도 : "+DustInfo[2])
         self.info3.pack()
         self.info3.place(x=320, y=210)
-        self.info4 = Label(g_daywindow, font=myFont, text="이산화질소 농도"+info4text)
+        self.info4 = Label(g_daywindow, font=myFont, text="이산화질소 농도 : "+DustInfo[3])
         self.info4.pack()
         self.info4.place(x=320, y=240)
-        self.info5 = Label(g_daywindow, font=myFont, text="오존 농도"+info5text)
+        self.info5 = Label(g_daywindow, font=myFont, text="오존 농도 : "+DustInfo[4])
         self.info5.pack()
         self.info5.place(x=320, y=270)
 
