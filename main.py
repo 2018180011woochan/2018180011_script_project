@@ -19,7 +19,6 @@ import mysmtplib
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 
-
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
 g_daywindow.geometry("500x600")
@@ -29,8 +28,6 @@ Dust10 = []
 Dust25 = []
 myimagelabel = []
 now = datetime.datetime.now()
-
-
 
 class MainGUI:
     def InitSearchEntry(self):
@@ -296,8 +293,11 @@ class MainGUI:
         s.close()
 
     def Telegram(self):
-        pass
+        Telegrambutton = Button(g_daywindow, width='6', height='3', command=self.SendTelegrambot)
+        Telegrambutton.place(x=170,y=530)
 
+    def SendTelegrambot(self):
+        pass
 
     def __init__(self):
         #wall = PhotoImage(file = 'back.png')
