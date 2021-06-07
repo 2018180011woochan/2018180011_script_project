@@ -21,7 +21,7 @@ from email.mime.text import MIMEText
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
-g_daywindow.geometry("600x600")
+g_daywindow.geometry("550x600")
 DataList = []
 DustState = []
 Dust10 = []
@@ -189,7 +189,7 @@ class MainGUI:
         myFont = font.Font(g_daywindow, size=15, weight='bold')
         DustText = Label(g_daywindow, font=myFont, text="미세먼지 정보")
         DustText.pack()
-        DustText.place(x=310,y=280)
+        DustText.place(x=310,y=310)
 
         #self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150')
         #self.canvas.pack()
@@ -203,7 +203,53 @@ class MainGUI:
         SearchButton.place(x=450, y=80)
 
     def SearchDustButtonAction(self):
-        pass
+        myListBox = SearchSiteListBox.curselection()[0]
+        conn = http.client.HTTPConnection("apis.data.go.kr")
+        hangul_utf8 = urllib.parse.quote("경기")
+        conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName="+hangul_utf8+"&ver=1.0")
+        req = conn.getresponse()
+
+        global DustState
+        DustState.clear()
+        print(req.status)
+        if req.status == 200:
+            TempDoc =req.read().decode('utf-8')
+            if TempDoc == None:
+                print("에러")
+            else:
+                parseData = parseString(TempDoc)
+                response = parseData.childNodes
+                body = response[0].childNodes
+                items = body[3].childNodes
+                item = items[1].childNodes
+
+                for temp in item:
+                    if temp.nodeName == "item":
+                        realnode = temp.childNodes
+                        if realnode[41].firstChild.nodeValue == myListBox:
+                            info1text = str(realnode[5].firstChild.nodeValue)
+                            info2text = str(realnode[7].firstChild.nodeValue)
+                            info3text = str(realnode[9].firstChild.nodeValue)
+                            info4text = str(realnode[39].firstChild.nodeValue)
+                            info5text = str(realnode[45].firstChild.nodeValue)
+
+        myFont =font.Font(g_daywindow, size=10, weight='bold')
+
+        self.info1 = Label(g_daywindow, font=myFont, text="통합대기환경수치"+info1text)
+        self.info1.pack()
+        self.info1.place(x=320, y=150)
+        self.info2 = Label(g_daywindow, font=myFont, text="이황산가스 농도"+info2text)
+        self.info2.pack()
+        self.info2.place(x=320, y=180)
+        self.info3 = Label(g_daywindow, font=myFont, text="일산화탄소 농도"+info3text)
+        self.info3.pack()
+        self.info3.place(x=320, y=210)
+        self.info4 = Label(g_daywindow, font=myFont, text="이산화질소 농도"+info4text)
+        self.info4.pack()
+        self.info4.place(x=320, y=240)
+        self.info5 = Label(g_daywindow, font=myFont, text="오존 농도"+info5text)
+        self.info5.pack()
+        self.info5.place(x=320, y=270)
 
     def SearchDust10(self):
         conn = http.client.HTTPConnection("apis.data.go.kr")
@@ -267,10 +313,10 @@ class MainGUI:
 
         DustText = Label(g_daywindow, font=myFont, text="미세먼지:  "+str(Dust10[0]))
         DustText.pack()
-        DustText.place(x=300,y=500)
+        DustText.place(x=300,y=530)
         DustText2 = Label(g_daywindow, font=myFont, text="초미세먼지: "+str(Dust25[0]))
         DustText2.pack()
-        DustText2.place(x=300,y=520)
+        DustText2.place(x=300,y=550)
 
         if Dust10[0] < 31:
             photo = PhotoImage(file="image/good.png")
@@ -282,7 +328,7 @@ class MainGUI:
             photo = PhotoImage(file="image/shit.png")
         imagelabel = Label(g_daywindow, image=photo)
         imagelabel.pack()
-        imagelabel.place(x=300, y=310)
+        imagelabel.place(x=300, y=340)
 
         self.canvas = Canvas(g_daywindow, bg='white', width='150', height='150', image=imagelabel)
         self.canvas.pack()
@@ -342,7 +388,7 @@ class MainGUI:
         #wall_label.place(x = 0,y = 0)
         self.UpTemparature = 0
         self.DownTemparature = 0
-        self.canvas = Canvas(g_daywindow, bg='azure', width='600', height='600')
+        self.canvas = Canvas(g_daywindow, bg='azure', width='550', height='600')
         self.canvas.pack()
         self.canvas.place(x=0,y=0)
         self.InitSearchEntry()
