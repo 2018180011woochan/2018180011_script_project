@@ -18,6 +18,7 @@ import mimetypes
 import mysmtplib
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
+import spam
 
 g_daywindow = Tk()
 g_daywindow.title("Weather_Reminder")
@@ -163,7 +164,7 @@ class MainGUI:
         SearchSiteListBox = Listbox(g_daywindow, font=myFont, activestyle='none',
                                 width=15, height=3, borderwidth=2,
                                 yscrollcommand=ListBoxScrollBar.set)
-
+        SearchSiteListBox.insert(0,str(spam.start()))
         conn = http.client.HTTPConnection("apis.data.go.kr")
         hangul_utf8 = urllib.parse.quote("경기")
         conn.request("GET", "/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=JeJzrQJprx9UjQkk7hibZqu2lXn9btXlpDpGp3KZL%2F8yEytBMzILptb4RUnKav%2FNndTc3oz6JVuKNfHsxehLuQ%3D%3D&returnType=xml&numOfRows=100&pageNo=1&sidoName="+hangul_utf8+"&ver=1.0")
@@ -181,13 +182,15 @@ class MainGUI:
                 items = body[3].childNodes
                 item = items[1].childNodes
 
-                i = 0
+                i = 1
 
                 for temp in item:
                     if temp.nodeName == "item":
                         realnode = temp.childNodes
                         SearchSiteListBox.insert(i, str(realnode[41].firstChild.nodeValue))
                         i += 1
+
+        SearchSiteListBox.insert(i+1,str(spam.end()))
 
         SearchSiteListBox.pack()
         SearchSiteListBox.place(x=310, y=70)
