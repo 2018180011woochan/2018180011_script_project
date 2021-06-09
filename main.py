@@ -232,7 +232,7 @@ class MainGUI:
                 for temp in item:
                     if temp.nodeName == "item":
                         realnode = temp.childNodes
-                        if realnode[41].firstChild.nodeValue == "정왕동":
+                        if realnode[41].firstChild.nodeValue == "고잔동":
                             DustInfo.append(str(realnode[5].firstChild.nodeValue))
                             DustInfo.append(str(realnode[7].firstChild.nodeValue))
                             DustInfo.append(str(realnode[9].firstChild.nodeValue))
@@ -348,18 +348,16 @@ class MainGUI:
         #self.canvas.create_text(50, 125, text="미세먼지:  "+str(Dust10[0]))
         #self.canvas.create_text(50, 140, text="초미세먼지: "+str(Dust25[0]))
 
-    def GoogleMap(self):
-        #p = PhotoImage(file="image/Clubs1.png")
-        myimage=PhotoImage(file="image/Clubs1.png")
-        self.GooglemapButton = Button(g_daywindow, width=6, height=3, command=self.OpenMap)
-        self.GooglemapButton.place(x=30,y=530)
-
-    def OpenMap(self):
-        print("오픈맵")
 
     def GMail(self):
+        global InputEntry
+        TempFont = font.Font(g_daywindow, size=12, weight='bold', family = 'Consolas')
+        InputEntry = Entry(g_daywindow, font = TempFont, width = 15, borderwidth = 12, relief = 'ridge')
+        InputEntry.pack()
+        InputEntry.place(x=13, y=535)
+
         GMailButton = Button(g_daywindow, width='6', height='3', command=self.SendMail)
-        GMailButton.place(x=100,y=530)
+        GMailButton.place(x=200,y=530)
 
     def SendMail(self):
         #global value
@@ -368,7 +366,7 @@ class MainGUI:
         htmlFileName = "logo.html"
 
         senderAddr = "kimwoochan1996@gmail.com"     # 보내는 사람 email 주소.
-        recipientAddr = "wc5427@naver.com"   # 받는 사람 email 주소.
+        recipientAddr = str(InputEntry.get())  # 받는 사람 email 주소.
 
         DataInfo = now.strftime('%Y-%m-%d')
 
@@ -405,7 +403,6 @@ class MainGUI:
         self.DustInfo()
         self.InitSearchDustButton()
 
-        self.GoogleMap()
         self.GMail()
 
         g_daywindow.mainloop()

@@ -142,12 +142,12 @@ InitTopText()
 InitSearchListBox()
 
 InitInputLabel()
-
+g_Tk.mainloop()
 InitSearchButton()
 
 InitRenderText()
 
-g_Tk.mainloop()
+
 #InitSendEmailButton()
 #InitSortListBox()
 #InitSortButton()
