@@ -33,6 +33,11 @@ now = datetime.datetime.now()
 class MainGUI:
     def InitSearchEntry(self):
         global SearchListBox
+
+        myFont2 = font.Font(g_daywindow, size=20, weight='bold')
+        MainName = Label(g_daywindow, font = myFont2, text="Weather_Reminder")
+        MainName.place(x=140,y=20)
+
         ListBoxScrollBar = Scrollbar(g_daywindow)
         ListBoxScrollBar.pack()
         ListBoxScrollBar.place(x=130,y=70)
@@ -181,7 +186,7 @@ class MainGUI:
                 for temp in item:
                     if temp.nodeName == "item":
                         realnode = temp.childNodes
-                        SearchSiteListBox.insert(i, str(realnode[41].firstChild.nodeValue)+str(i))
+                        SearchSiteListBox.insert(i, str(realnode[41].firstChild.nodeValue))
                         i += 1
 
         SearchSiteListBox.pack()
@@ -382,12 +387,6 @@ class MainGUI:
         s.sendmail(senderAddr , [recipientAddr], msg.as_string())
         s.close()
 
-    def Telegram(self):
-        Telegrambutton = Button(g_daywindow, width='6', height='3', command=self.SendTelegrambot)
-        Telegrambutton.place(x=170,y=530)
-
-    def SendTelegrambot(self):
-        pass
 
     def __init__(self):
         #wall = PhotoImage(file = 'back.png')
@@ -408,7 +407,6 @@ class MainGUI:
 
         self.GoogleMap()
         self.GMail()
-        self.Telegram()
 
         g_daywindow.mainloop()
 
